@@ -9,15 +9,14 @@ public class EgyptianPyramidsApp {
   // I've used two arrays here for O(1) reading of the pharaohs and pyramids.
   // other structures or additional structures can be used
   protected Pharaoh[] pharaohArray;
-  protected Pharaoh[] pharaohArray2;
   protected Pyramid[] pyramidArray;
-  static HashMap<Integer, Pyramid> pyramidHashMap = new HashMap<Integer, Pyramid>();
-  static HashMap<Integer, Pharaoh> pharaohHashMap = new HashMap<Integer, Pharaoh>();
-  static HashMap<String, Integer> hieroglyphMap = new HashMap<String, Integer>();
+  protected HashMap<Integer, Pyramid> pyramidHashMap = new HashMap<Integer, Pyramid>();
+  protected HashMap<Integer, Pharaoh> pharaohHashMap = new HashMap<Integer, Pharaoh>();
+  protected HashMap<String, Integer> hieroglyphMap = new HashMap<String, Integer>();
   // Notice that there is a separate HashMap (hieroglyphMap) for matching hieroglyphs to IDs
   // Having this additional HashMap removes the need to iterate through a whole array to find the right hieroglyph
 
-  static TreeSet<Integer> requestedPyramids = new TreeSet<Integer>();
+  protected TreeSet<Integer> requestedPyramids = new TreeSet<Integer>();
   // Observe that this program uses a TreeSet rather than an ordinary set
   // (This ensures that the elements are printed out sorted)
 
