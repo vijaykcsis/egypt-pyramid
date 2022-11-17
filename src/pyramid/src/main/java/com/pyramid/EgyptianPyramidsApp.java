@@ -9,7 +9,9 @@ public class EgyptianPyramidsApp {
   // I've used two arrays here for O(1) reading of the pharaohs and pyramids.
   // other structures or additional structures can be used
   protected Pharaoh[] pharaohArray;
+  protected Pharaoh[] pharaohArray2;
   protected Pyramid[] pyramidArray;
+  static HashMap<Integer, Pharaoh> pharaohHashMap = new HashMap<Integer, Pharaoh>();
 
   public static void main(String[] args) {
     // create and start the app
@@ -27,7 +29,6 @@ public class EgyptianPyramidsApp {
       printMenu();
       System.out.print("Enter a command: ");
       command = menuGetCommand(scan);
-
       executeCommand(scan, command);
     }
   }
@@ -36,7 +37,6 @@ public class EgyptianPyramidsApp {
   public EgyptianPyramidsApp() {
     // read egyptian pharaohs
     String pharaohFile =
-      //"/Users/jerom/Documents/GitHub/class-java/egyptian-pyramids/demo/src/main/java/com/egyptianExample/pharaoh.json";
       "/Users/redsm/Documents/GitHub/egypt-pyramid/src/pyramid/src/main/java/com/pyramid/pharaoh.json";
     JSONArray pharaohJSONArray = JSONFile.readArray(pharaohFile);
 
@@ -46,7 +46,6 @@ public class EgyptianPyramidsApp {
     // read pyramids
     String pyramidFile =
       "/Users/redsm/Documents/GitHub/egypt-pyramid/src/pyramid/src/main/java/com/pyramid/pyramid.json";
-      //"/Users/jerom/Documents/GitHub/class-java/egyptian-pyramids/demo/src/main/java/com/egyptian/pyramid.json";
     JSONArray pyramidJSONArray = JSONFile.readArray(pyramidFile);
 
     // create and initialize the pyramid array
@@ -58,7 +57,8 @@ public class EgyptianPyramidsApp {
   private void initializePharaoh(JSONArray pharaohJSONArray) {
     // create array and hash map
     pharaohArray = new Pharaoh[pharaohJSONArray.size()];
-
+    pharaohArray2 = new Pharaoh[pharaohJSONArray.size()];
+    
     // initalize the array
     for (int i = 0; i < pharaohJSONArray.size(); i++) {
       // get the object
@@ -75,7 +75,12 @@ public class EgyptianPyramidsApp {
       // add a new pharoah to array
       Pharaoh p = new Pharaoh(id, name, begin, end, contribution, hieroglyphic);
       pharaohArray[i] = p;
+      pharaohArray2[i] = p;
+
+      pharaohHashMap.put(id, p);
     }
+    //System.out.println("PHAROAH MAP:");
+    //pharaohHashMap.get(1).print();
   }
 
     // initialize the pyramid array
@@ -131,7 +136,14 @@ public class EgyptianPyramidsApp {
       printMenuLine();
       pharaohArray[i].print();
       printMenuLine();
-    }
+    }    
+  }
+
+  // print a particular pharaoh
+  private void findPharaoh(Scanner scan) {
+    System.out.println("Please enter the ID of the pharaoh you'd like to search for: ");
+    int input = Integer.parseInteger(scan.nextLine());
+    switch ()
   }
 
   private Boolean executeCommand(Scanner scan, Character command) {
@@ -140,6 +152,9 @@ public class EgyptianPyramidsApp {
     switch (command) {
       case '1':
         printAllPharaoh();
+        break;
+      case '2':
+        findPharaoh(scan);
         break;
       case 'q':
         System.out.println("Thank you for using Nassef's Egyptian Pyramid App!");
@@ -170,6 +185,10 @@ public class EgyptianPyramidsApp {
     System.out.printf("Command\t\tDescription\n");
     System.out.printf("-------\t\t---------------------------------------\n");
     printMenuCommand('1', "List all the pharoahs");
+    printMenuCommand('2', "Displays a specific Egyptian Pharaoh");
+    printMenuCommand('3', "List all the pyramids");
+    printMenuCommand('4', "Displays a specific pyramid");
+    printMenuCommand('5', "Displays a list of specific pyramids");
     printMenuCommand('q', "Quit");
     printMenuLine();
   }
