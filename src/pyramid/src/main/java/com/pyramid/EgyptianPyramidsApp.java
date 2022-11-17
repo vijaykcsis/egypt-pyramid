@@ -12,6 +12,9 @@ public class EgyptianPyramidsApp {
   protected Pharaoh[] pharaohArray2;
   protected Pyramid[] pyramidArray;
   static HashMap<Integer, Pharaoh> pharaohHashMap = new HashMap<Integer, Pharaoh>();
+  static HashMap<String, Integer> hieroglyphMap = new HashMap<String, Integer>();
+  // Notice that there is a separate HashMap for matching hieroglyphs to IDs
+  // Having this second HashMap removes the need to iterate through a whole array to find the right hieroglyph
 
   public static void main(String[] args) {
     // create and start the app
@@ -57,7 +60,6 @@ public class EgyptianPyramidsApp {
   private void initializePharaoh(JSONArray pharaohJSONArray) {
     // create array and hash map
     pharaohArray = new Pharaoh[pharaohJSONArray.size()];
-    pharaohArray2 = new Pharaoh[pharaohJSONArray.size()];
     
     // initalize the array
     for (int i = 0; i < pharaohJSONArray.size(); i++) {
@@ -75,9 +77,9 @@ public class EgyptianPyramidsApp {
       // add a new pharoah to array
       Pharaoh p = new Pharaoh(id, name, begin, end, contribution, hieroglyphic);
       pharaohArray[i] = p;
-      pharaohArray2[i] = p;
 
       pharaohHashMap.put(id, p);
+      hieroglyphMap.put(hieroglyphic, id);
     }
     //System.out.println("PHAROAH MAP:");
     //pharaohHashMap.get(1).print();
@@ -139,11 +141,31 @@ public class EgyptianPyramidsApp {
     }    
   }
 
+  private void printAllPyramid() {
+    for (int i = 0; i < pyramidArray.length; i++) {
+      printMenuLine();
+      System.out.printf("Pyramid %s\n", pyramidArray[i].name);
+      System.out.printf("\tid: %d\n", pyramidArray[i].id);
+      for (int j = 0; j < pyramidArray[i].contributors.length; j++) {
+        // pharaohHashMap.get(hieroglyphMap.get(pyramidArray[i].contributors[j]))
+        //System.out.printf("\tContributor %i: %s\n", j, pyramidArray[i].contributors);
+        System.out.println(hieroglyphMap.get(pyramidArray[i].contributors[j]));
+      }
+      printMenuLine();
+    }    
+  }
+
   // print a particular pharaoh
   private void findPharaoh(Scanner scan) {
-    System.out.println("Please enter the ID of the pharaoh you'd like to search for: ");
-    int input = Integer.parseInteger(scan.nextLine());
-    switch ()
+    System.out.print("Please enter the ID of the pharaoh you'd like to search for: ");
+    try {
+      int input = Integer.parseInt(scan.nextLine());
+      printMenuLine();
+      pharaohHashMap.get(input).print();
+    }
+    catch (Exception e) {
+      System.out.println("ERROR: ID does not exist or invalid input");
+    }
   }
 
   private Boolean executeCommand(Scanner scan, Character command) {
@@ -155,6 +177,9 @@ public class EgyptianPyramidsApp {
         break;
       case '2':
         findPharaoh(scan);
+        break;
+      case '3':
+        printAllPyramid();
         break;
       case 'q':
         System.out.println("Thank you for using Nassef's Egyptian Pyramid App!");
