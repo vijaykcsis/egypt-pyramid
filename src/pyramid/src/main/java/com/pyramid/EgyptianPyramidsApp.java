@@ -146,11 +146,22 @@ public class EgyptianPyramidsApp {
       printMenuLine();
       System.out.printf("Pyramid %s\n", pyramidArray[i].name);
       System.out.printf("\tid: %d\n", pyramidArray[i].id);
+      int totalContribution = 0;
       for (int j = 0; j < pyramidArray[i].contributors.length; j++) {
+        // Note that "contrib" is short for "contributer"
+        String contribHieroglyph = pyramidArray[i].contributors[j];
+        Integer contribId = hieroglyphMap.get(contribHieroglyph);
+        String contribName = pharaohHashMap.get(contribId).name;
+        Integer contribAmount = pharaohHashMap.get(contribId).contribution;
+        totalContribution += contribAmount;
         // pharaohHashMap.get(hieroglyphMap.get(pyramidArray[i].contributors[j]))
-        //System.out.printf("\tContributor %i: %s\n", j, pyramidArray[i].contributors);
-        System.out.println(hieroglyphMap.get(pyramidArray[i].contributors[j]));
+        System.out.println("\tContributor " + (j+1) + ": " + (contribName) + " (" + (contribAmount) + " gold coins)");
+        // Notice that we have to add +1 to j, because of zero-indexing
+        //(pharaohHashMap.get(contribId).name)
+        //System.out.println(pharaohHashMap.get(hieroglyphMap.get(pyramidArray[i].contributors[j])).name);
+        //System.out.println(pharaohHashMap.get(contribId).name);
       }
+      System.out.println("\tTotal Contribution: " + (totalContribution) + " gold coins");
       printMenuLine();
     }    
   }
