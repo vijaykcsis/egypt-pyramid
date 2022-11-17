@@ -3,7 +3,7 @@ package com.pyramid;
 import java.util.*;
 import org.json.simple.*;
 
-public class EgyptianPyramidsAppExample {
+public class EgyptianPyramidsApp {
 
 
   // I've used two arrays here for O(1) reading of the pharaohs and pyramids.
@@ -13,7 +13,7 @@ public class EgyptianPyramidsAppExample {
 
   public static void main(String[] args) {
     // create and start the app
-    EgyptianPyramidsAppExample app = new EgyptianPyramidsAppExample();
+    EgyptianPyramidsApp app = new EgyptianPyramidsApp();
     app.start();
   }
 
@@ -33,7 +33,7 @@ public class EgyptianPyramidsAppExample {
   }
 
   // constructor to initialize the app and read commands
-  public EgyptianPyramidsAppExample() {
+  public EgyptianPyramidsApp() {
     // read egyptian pharaohs
     String pharaohFile =
       //"/Users/jerom/Documents/GitHub/class-java/egyptian-pyramids/demo/src/main/java/com/egyptianExample/pharaoh.json";
