@@ -4,12 +4,8 @@ import java.util.*;
 import org.json.simple.*;
 
 public class EgyptianPyramidsApp {
-
-
   // I've used two arrays here for O(1) reading of the pharaohs and pyramids.
   // other structures or additional structures can be used
-  protected Pharaoh[] pharaohArray;
-  protected Pyramid[] pyramidArray;
   protected HashMap<Integer, Pyramid> pyramidHashMap = new HashMap<Integer, Pyramid>();
   protected HashMap<Integer, Pharaoh> pharaohHashMap = new HashMap<Integer, Pharaoh>();
   protected HashMap<String, Integer> hieroglyphMap = new HashMap<String, Integer>();
@@ -19,6 +15,9 @@ public class EgyptianPyramidsApp {
   protected TreeSet<Integer> requestedPyramids = new TreeSet<Integer>();
   // Observe that this program uses a TreeSet rather than an ordinary set
   // (This ensures that the elements are printed out sorted)
+
+  protected Integer numPharaohs;
+  protected Integer numPyramids;
 
   public static void main(String[] args) {
     // create and start the app
@@ -63,10 +62,9 @@ public class EgyptianPyramidsApp {
   // initialize the pharaoh array
   private void initializePharaoh(JSONArray pharaohJSONArray) {
     // create array and hash map
-    pharaohArray = new Pharaoh[pharaohJSONArray.size()];
-    
+    numPharaohs = pharaohJSONArray.size();
     // initalize the array
-    for (int i = 0; i < pharaohJSONArray.size(); i++) {
+    for (int i = 0; i < numPharaohs; i++) {
       // get the object
       JSONObject o = (JSONObject) pharaohJSONArray.get(i);
 
@@ -80,7 +78,6 @@ public class EgyptianPyramidsApp {
 
       // add a new pharoah to array
       Pharaoh p = new Pharaoh(id, name, begin, end, contribution, hieroglyphic);
-      pharaohArray[i] = p;
 
       pharaohHashMap.put(id, p);
       hieroglyphMap.put(hieroglyphic, id);
@@ -92,10 +89,10 @@ public class EgyptianPyramidsApp {
     // initialize the pyramid array
     private void initializePyramid(JSONArray pyramidJSONArray) {
       // create array and hash map
-      pyramidArray = new Pyramid[pyramidJSONArray.size()];
-  
+      numPyramids = pyramidJSONArray.size();
+
       // initalize the array
-      for (int i = 0; i < pyramidJSONArray.size(); i++) {
+      for (int i = 0; i < numPyramids; i++) {
         // get the object
         JSONObject o = (JSONObject) pyramidJSONArray.get(i);
   
@@ -111,7 +108,6 @@ public class EgyptianPyramidsApp {
   
         // add a new pyramid to array
         Pyramid p = new Pyramid(id, name, contributors);
-        pyramidArray[i] = p;
         pyramidHashMap.put(id, p);
       }
     }
@@ -139,9 +135,9 @@ public class EgyptianPyramidsApp {
 
   // print all pharaohs
   private void printAllPharaoh() {
-    for (int i = 0; i < pharaohArray.length; i++) {
+    for (int i = 0; i < numPharaohs; i++) {
       printMenuLine();
-      pharaohArray[i].print();
+      pharaohHashMap.get(i).print();
       printMenuLine();
     }    
   }
@@ -161,14 +157,13 @@ public class EgyptianPyramidsApp {
       totalContribution += contribAmount;
       System.out.println("\tContributor " + (j+1) + ": " + (contribName) + " (" + (contribAmount) + " gold coins)");
       // Notice that we have to add +1 to j, because of zero-indexing
-      //System.out.println(pharaohHashMap.get(hieroglyphMap.get(pyramidArray[i].contributors[j])).name);
     }
     System.out.println("\tTotal Contribution: " + (totalContribution) + " gold coins");
   }
   private void printAllPyramid() {
-    for (int i = 0; i < pyramidArray.length; i++) {
+    for (int i = 0; i < numPyramids; i++) {
       printMenuLine();
-      printPyramidInfo(pyramidArray[i]);
+      printPyramidInfo(pyramidHashMap.get(i));
       printMenuLine();
     }    
   }
@@ -214,6 +209,8 @@ public class EgyptianPyramidsApp {
     }
     else {
       System.out.println("ID\t\tPyramid Name");
+      System.out.println("--\t\t------------");
+
       for (Integer i: requestedPyramids) {
         System.out.println((i) + "\t\t" + pyramidHashMap.get(i).name);
         //printPyramidInfo(pyramidHashMap.get(i));
