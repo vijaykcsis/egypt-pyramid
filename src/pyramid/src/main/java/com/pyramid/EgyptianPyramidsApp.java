@@ -11,10 +11,15 @@ public class EgyptianPyramidsApp {
   protected Pharaoh[] pharaohArray;
   protected Pharaoh[] pharaohArray2;
   protected Pyramid[] pyramidArray;
+  static HashMap<Integer, Pyramid> pyramidHashMap = new HashMap<Integer, Pyramid>();
   static HashMap<Integer, Pharaoh> pharaohHashMap = new HashMap<Integer, Pharaoh>();
   static HashMap<String, Integer> hieroglyphMap = new HashMap<String, Integer>();
-  // Notice that there is a separate HashMap for matching hieroglyphs to IDs
-  // Having this second HashMap removes the need to iterate through a whole array to find the right hieroglyph
+  // Notice that there is a separate HashMap (hieroglyphMap) for matching hieroglyphs to IDs
+  // Having this additional HashMap removes the need to iterate through a whole array to find the right hieroglyph
+
+  static TreeSet<Integer> requestedPyramids = new TreeSet<Integer>();
+  // Observe that this program uses a TreeSet rather than an ordinary set
+  // (This ensures that the elements are printed out sorted)
 
   public static void main(String[] args) {
     // create and start the app
@@ -108,6 +113,7 @@ public class EgyptianPyramidsApp {
         // add a new pyramid to array
         Pyramid p = new Pyramid(id, name, contributors);
         pyramidArray[i] = p;
+        pyramidHashMap.put(id, p);
       }
     }
 
@@ -141,32 +147,34 @@ public class EgyptianPyramidsApp {
     }    
   }
 
+  // given some pyramid "p", this function will print information about the pyramid
+  // It prints out the pyramid name, its ID, all its contributors, and the total contribution 
+  private void printPyramidInfo(Pyramid p) {
+    int totalContribution = 0;
+    System.out.printf("Pyramid %s\n", p.name);
+    System.out.printf("\tid: %d\n", p.id);
+    for (int j = 0; j < p.contributors.length; j++) {
+      // Note that "contrib" is short for "contributer"
+      String contribHieroglyph = p.contributors[j];
+      Integer contribId = hieroglyphMap.get(contribHieroglyph);
+      String contribName = pharaohHashMap.get(contribId).name;
+      Integer contribAmount = pharaohHashMap.get(contribId).contribution;
+      totalContribution += contribAmount;
+      System.out.println("\tContributor " + (j+1) + ": " + (contribName) + " (" + (contribAmount) + " gold coins)");
+      // Notice that we have to add +1 to j, because of zero-indexing
+      //System.out.println(pharaohHashMap.get(hieroglyphMap.get(pyramidArray[i].contributors[j])).name);
+    }
+    System.out.println("\tTotal Contribution: " + (totalContribution) + " gold coins");
+  }
   private void printAllPyramid() {
     for (int i = 0; i < pyramidArray.length; i++) {
       printMenuLine();
-      System.out.printf("Pyramid %s\n", pyramidArray[i].name);
-      System.out.printf("\tid: %d\n", pyramidArray[i].id);
-      int totalContribution = 0;
-      for (int j = 0; j < pyramidArray[i].contributors.length; j++) {
-        // Note that "contrib" is short for "contributer"
-        String contribHieroglyph = pyramidArray[i].contributors[j];
-        Integer contribId = hieroglyphMap.get(contribHieroglyph);
-        String contribName = pharaohHashMap.get(contribId).name;
-        Integer contribAmount = pharaohHashMap.get(contribId).contribution;
-        totalContribution += contribAmount;
-        // pharaohHashMap.get(hieroglyphMap.get(pyramidArray[i].contributors[j]))
-        System.out.println("\tContributor " + (j+1) + ": " + (contribName) + " (" + (contribAmount) + " gold coins)");
-        // Notice that we have to add +1 to j, because of zero-indexing
-        //(pharaohHashMap.get(contribId).name)
-        //System.out.println(pharaohHashMap.get(hieroglyphMap.get(pyramidArray[i].contributors[j])).name);
-        //System.out.println(pharaohHashMap.get(contribId).name);
-      }
-      System.out.println("\tTotal Contribution: " + (totalContribution) + " gold coins");
+      printPyramidInfo(pyramidArray[i]);
       printMenuLine();
     }    
   }
 
-  // print a particular pharaoh
+  // find and print a particular pharaoh
   private void findPharaoh(Scanner scan) {
     System.out.print("Please enter the ID of the pharaoh you'd like to search for: ");
     try {
@@ -176,6 +184,41 @@ public class EgyptianPyramidsApp {
     }
     catch (Exception e) {
       System.out.println("ERROR: ID does not exist or invalid input");
+    }
+  }
+
+   // find and print a particular pyramid
+   private void findPyramid(Scanner scan) {
+    System.out.print("Please enter the ID of the pyramid you'd like to search for: ");
+    boolean success = true;
+    int input = 0;
+    try {
+      input = Integer.parseInt(scan.nextLine());
+      printMenuLine();
+      printPyramidInfo(pyramidHashMap.get(input));
+    }
+    catch (Exception e) {
+      success = false;
+      System.out.println("ERROR: ID does not exist or invalid input");
+    }
+    if (success) {
+      requestedPyramids.add(input);
+    }
+  }
+
+  void printRequestedPyramids() {
+    System.out.println("Printing a sorted list of all requested pyramids...");
+    // (We sort the list of pyramids by using the TreeSet data structure)
+    
+    if (requestedPyramids.isEmpty()) {
+      System.out.println("ERROR: There is nothing to print out because no pyramids have been requested yet");
+    }
+    else {
+      System.out.println("ID\t\tPyramid Name");
+      for (Integer i: requestedPyramids) {
+        System.out.println((i) + "\t\t" + pyramidHashMap.get(i).name);
+        //printPyramidInfo(pyramidHashMap.get(i));
+      } 
     }
   }
 
@@ -191,6 +234,12 @@ public class EgyptianPyramidsApp {
         break;
       case '3':
         printAllPyramid();
+        break;
+      case '4':
+        findPyramid(scan);
+        break;
+      case '5':
+        printRequestedPyramids();
         break;
       case 'q':
         System.out.println("Thank you for using Nassef's Egyptian Pyramid App!");
