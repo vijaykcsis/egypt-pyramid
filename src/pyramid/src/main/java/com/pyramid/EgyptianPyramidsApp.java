@@ -6,15 +6,15 @@ import org.json.simple.*;
 public class EgyptianPyramidsApp {
   // I've used two arrays here for O(1) reading of the pharaohs and pyramids.
   // other structures or additional structures can be used
-  protected HashMap<Integer, Pyramid> pyramidHashMap = new HashMap<Integer, Pyramid>();
-  protected HashMap<Integer, Pharaoh> pharaohHashMap = new HashMap<Integer, Pharaoh>();
-  protected HashMap<String, Integer> hieroglyphMap = new HashMap<String, Integer>();
+  protected HashMap<Integer, Pyramid> pyramidHashMap;
+  protected HashMap<Integer, Pharaoh> pharaohHashMap;
+  protected HashMap<String, Integer> hieroglyphMap;
   // Notice that there is a separate HashMap (hieroglyphMap) for matching hieroglyphs to IDs
   // Having this additional HashMap removes the need to iterate through a whole array to find the right hieroglyph
-
-  protected TreeSet<Integer> requestedPyramids = new TreeSet<Integer>();
+  
+  protected TreeSet<Integer> requestedPyramids;
   // Observe that this program uses a TreeSet rather than an ordinary set
-  // (This ensures that the elements are printed out sorted)
+  // (Using a TreeSet ensures that the set is automatically sorted when command "5" is run)
 
   protected Integer numPharaohs;
   protected Integer numPyramids;
@@ -61,6 +61,9 @@ public class EgyptianPyramidsApp {
 
   // initialize the pharaoh array
   private void initializePharaoh(JSONArray pharaohJSONArray) {
+    hieroglyphMap = new HashMap<String, Integer>();
+    pharaohHashMap = new HashMap<Integer, Pharaoh>();
+    requestedPyramids = new TreeSet<Integer>();
     // create array and hash map
     numPharaohs = pharaohJSONArray.size();
     // initalize the array
@@ -82,12 +85,11 @@ public class EgyptianPyramidsApp {
       pharaohHashMap.put(id, p);
       hieroglyphMap.put(hieroglyphic, id);
     }
-    //System.out.println("PHAROAH MAP:");
-    //pharaohHashMap.get(1).print();
   }
 
     // initialize the pyramid array
     private void initializePyramid(JSONArray pyramidJSONArray) {
+      pyramidHashMap = new HashMap<Integer, Pyramid>();
       // create array and hash map
       numPyramids = pyramidJSONArray.size();
 
@@ -213,7 +215,6 @@ public class EgyptianPyramidsApp {
 
       for (Integer i: requestedPyramids) {
         System.out.println((i) + "\t\t" + pyramidHashMap.get(i).name);
-        //printPyramidInfo(pyramidHashMap.get(i));
       } 
     }
   }
