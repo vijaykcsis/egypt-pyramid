@@ -13,7 +13,7 @@ public class EgyptianPyramidsApp {
   // Having this additional HashMap removes the need to iterate through a whole array to find the right hieroglyph
   
   protected TreeSet<Integer> requestedPyramids;
-  // Observe that this program uses a TreeSet rather than an ordinary set
+  // Observe that this program uses a TreeSet rather than a HashSet
   // (Using a TreeSet ensures that the set is automatically sorted when command "5" is run)
 
   protected Integer numPharaohs;
@@ -162,6 +162,8 @@ public class EgyptianPyramidsApp {
     }
     System.out.println("\tTotal Contribution: " + (totalContribution) + " gold coins");
   }
+
+  // this method will print out a list of all the pyramids
   private void printAllPyramid() {
     for (int i = 0; i < numPyramids; i++) {
       printMenuLine();
@@ -201,7 +203,7 @@ public class EgyptianPyramidsApp {
       requestedPyramids.add(input);
     }
   }
-
+  // this method prints out a list of pyramids requested by the user
   void printRequestedPyramids() {
     System.out.println("Printing a sorted list of all requested pyramids...");
     // (We sort the list of pyramids by using the TreeSet data structure)
