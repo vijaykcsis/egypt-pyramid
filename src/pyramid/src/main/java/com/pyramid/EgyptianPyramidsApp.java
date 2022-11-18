@@ -151,7 +151,7 @@ public class EgyptianPyramidsApp {
     System.out.printf("Pyramid %s\n", p.name);
     System.out.printf("\tid: %d\n", p.id);
     for (int j = 0; j < p.contributors.length; j++) {
-      // Note that "contrib" is short for "contributer"
+      // Note that "contrib" is short for "contributor"
       String contribHieroglyph = p.contributors[j];
       Integer contribId = hieroglyphMap.get(contribHieroglyph);
       String contribName = pharaohHashMap.get(contribId).name;
